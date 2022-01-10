@@ -1,5 +1,6 @@
 package com.itsrdb.a7minuteworkout
 
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -9,6 +10,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import org.w3c.dom.Text
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -24,6 +26,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var currentExercisePosition = -1
 
     private var tts: TextToSpeech? = null
+    private var player: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,10 +110,22 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             tts!!.shutdown()
         }
 
+        if(player != null){
+            player!!.stop()
+        }
+
         super.onDestroy()
     }
 
     private fun setupRestView(){
+        try {
+            player = MediaPlayer.create(applicationContext, R.raw.press_start)
+            player!!.isLooping = false
+            player!!.start()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+
         val llRest = findViewById<LinearLayout>(R.id.llRestView)
         val llExercise = findViewById<LinearLayout>(R.id.llExerciseView)
         llExercise.visibility = View.GONE
