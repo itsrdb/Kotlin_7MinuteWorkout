@@ -96,6 +96,17 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             restTimer!!.cancel()
             restProgress = 0
         }
+
+        if(exerciseTimer != null){
+            exerciseTimer!!.cancel()
+            exerciseProgress = 0
+        }
+
+        if(tts != null){
+            tts!!.stop()
+            tts!!.shutdown()
+        }
+
         super.onDestroy()
     }
 
@@ -120,6 +131,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             exerciseTimer!!.cancel()
             exerciseProgress = 0
         }
+
+        speakOut(exerciseList!![currentExercisePosition].getName())
         setExerciseProgressBar()
 
         val ivImage = findViewById<ImageView>(R.id.ivImage)
