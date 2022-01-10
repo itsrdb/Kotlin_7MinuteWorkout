@@ -3,20 +3,27 @@ package com.itsrdb.a7minuteworkout
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
+import org.w3c.dom.Text
+import java.util.*
+import kotlin.collections.ArrayList
 
-class ExerciseActivity : AppCompatActivity() {
+class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var restTimer: CountDownTimer? = null
     private var restProgress = 0    //progress left
 
     private var exerciseTimer: CountDownTimer? = null
     private var exerciseProgress = 0    //progress left
+
+    private var exerciseList: ArrayList<ExerciseModel>? = null
+    private var currentExercisePosition = -1
+
+    private var tts: TextToSpeech? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +39,9 @@ class ExerciseActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        tts = TextToSpeech(this, this)
+
+        exerciseList = Constants.defaultExerciseList()
         setupRestView()
     }
 
@@ -48,6 +58,7 @@ class ExerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
+                currentExercisePosition++
                 setupExerciseView()
             }
         }.start()
@@ -70,6 +81,11 @@ class ExerciseActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
+                if(currentExercisePosition < exerciseList?.size!! - 1){
+                    setupRestView()
+                }else{
+                    Toast.makeText(this@ExerciseActivity, "Finished", Toast.LENGTH_SHORT).show()
+                }
                 Toast.makeText(this@ExerciseActivity, "Moving ahead", Toast.LENGTH_SHORT).show()
             }
         }.start()
@@ -84,10 +100,18 @@ class ExerciseActivity : AppCompatActivity() {
     }
 
     private fun setupRestView(){
+        val llRest = findViewById<LinearLayout>(R.id.llRestView)
+        val llExercise = findViewById<LinearLayout>(R.id.llExerciseView)
+        llExercise.visibility = View.GONE
+        llRest.visibility = View.VISIBLE
+
         if(restTimer != null){
             restTimer!!.cancel()
             restProgress = 0
         }
+
+        val tvUpcoming = findViewById<TextView>(R.id.tvUpcomingExerciseName)
+        tvUpcoming.text = exerciseList!![currentExercisePosition+1].getName()
         setRestProgressBar()
     }
 
@@ -97,5 +121,25 @@ class ExerciseActivity : AppCompatActivity() {
             exerciseProgress = 0
         }
         setExerciseProgressBar()
+
+        val ivImage = findViewById<ImageView>(R.id.ivImage)
+        ivImage.setImageResource(exerciseList!![currentExercisePosition].getImage())
+        val tvExercise = findViewById<TextView>(R.id.tvExerciseName)
+        tvExercise.text = exerciseList!![currentExercisePosition].getName()
+    }
+
+    override fun onInit(p0: Int) {
+        if(p0 == TextToSpeech.SUCCESS){
+            val result = tts!!.setLanguage(Locale.US)
+            if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                Log.e("TTS", "Language not supported")
+            }
+        }else{
+            Log.e("TTS", "Initialization failed")
+        }
+    }
+
+    private fun speakOut(text: String){
+        tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
     }
 }
