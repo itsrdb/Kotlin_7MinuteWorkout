@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +15,11 @@ class MainActivity : AppCompatActivity() {
         var llStart = findViewById<LinearLayout>(R.id.llStart)
         llStart.setOnClickListener {
             intent = Intent(this, ExerciseActivity::class.java)
+            startActivity(intent)
+        }
+
+        llBMI.setOnClickListener {
+            val intent = Intent(this, BMIActivity::class.java)
             startActivity(intent)
         }
     }
