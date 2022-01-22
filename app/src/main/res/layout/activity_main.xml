@@ -18,7 +18,7 @@
         android:id="@+id/llStart"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="20sp"
+        android:layout_marginTop="50sp"
         android:background="@drawable/item_color_accent_border_ripple_background"
         android:gravity="center">
 
