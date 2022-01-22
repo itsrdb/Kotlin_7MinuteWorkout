@@ -15,11 +15,6 @@ class MainActivity : AppCompatActivity() {
         llStart.setOnClickListener {
             intent = Intent(this, ExerciseActivity::class.java)
             startActivity(intent)
-//            Toast.makeText(
-//                this@MainActivity,
-//                "Here we will start the exercise.",
-//                Toast.LENGTH_SHORT
-//            ).show()
         }
     }
 }
