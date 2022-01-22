@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_exercise.*
 import org.w3c.dom.Text
 import java.lang.Exception
 import java.util.*
@@ -28,6 +30,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var tts: TextToSpeech? = null
     private var player: MediaPlayer? = null
 
+    private var exerciseAdapter: ExerciseStatusAdapter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercise)
@@ -46,6 +50,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         exerciseList = Constants.defaultExerciseList()
         setupRestView()
+        setupExerciseStatusRecyclerView()
     }
 
     private fun setRestProgressBar(){
@@ -128,16 +133,16 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         val llRest = findViewById<LinearLayout>(R.id.llRestView)
         val llExercise = findViewById<LinearLayout>(R.id.llExerciseView)
-        llExercise.visibility = View.GONE
         llRest.visibility = View.VISIBLE
+        llExercise.visibility = View.GONE
 
         if(restTimer != null){
             restTimer!!.cancel()
             restProgress = 0
         }
 
-        val tvUpcoming = findViewById<TextView>(R.id.tvUpcomingExerciseName)
-        tvUpcoming.text = exerciseList!![currentExercisePosition+1].getName()
+        //val tvUpcoming = findViewById<TextView>(R.id.tvUpcomingExerciseName)
+        tvUpcomingExerciseName.text = exerciseList!![currentExercisePosition+1].getName()
         setRestProgressBar()
     }
 
@@ -169,5 +174,12 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun speakOut(text: String){
         tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+    }
+
+    private fun setupExerciseStatusRecyclerView(){
+        rvExerciseStatus.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
+        false)
+        exerciseAdapter = ExerciseStatusAdapter(exerciseList!!, this)
+        rvExerciseStatus.adapter = exerciseAdapter
     }
 }

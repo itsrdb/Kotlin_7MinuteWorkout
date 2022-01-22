@@ -18,6 +18,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar_exercise_activity"
         android:gravity="center"
+        android:layout_above="@id/rvExerciseStatus"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -91,6 +92,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar_exercise_activity"
         android:gravity="center"
+        android:layout_above="@id/rvExerciseStatus"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -151,5 +153,16 @@
         </FrameLayout>
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvExerciseStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp" />
 
 </RelativeLayout>
