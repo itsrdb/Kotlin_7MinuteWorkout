@@ -8,6 +8,12 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 class BMIActivity : AppCompatActivity() {
+
+    val METRIC_UNIT_VIEW = "METRIC_UNIT_VIEW"
+    val US_UNITS_VIEW = "US_UNIT_VIEW"
+
+    var currentVisibleView: String = METRIC_UNIT_VIEW
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bmi)
@@ -32,6 +38,15 @@ class BMIActivity : AppCompatActivity() {
                 displayBDMIResult(bmi)
             }
         }
+
+        makeVisibleMetricUnitsView()
+        rgUnits.setOnCheckedChangeListener { radioGroup, i ->
+            if(i == R.id.rbMetricUnits){
+                makeVisibleMetricUnitsView()
+            }else{
+                makeVisibleUsUnitsView()
+            }
+        }
     }
 
     private fun validateMetricUnits(): Boolean{
@@ -43,6 +58,37 @@ class BMIActivity : AppCompatActivity() {
             isValid = false
         }
         return isValid
+    }
+
+
+
+    private fun makeVisibleMetricUnitsView(){   //for metric only
+        currentVisibleView = METRIC_UNIT_VIEW
+        llMetricUnitsView.visibility = View.VISIBLE // METRIC UNITS VIEW is Visible
+        llUsUnitsView.visibility = View.GONE // US UNITS VIEW is hidden
+
+        etMetricUnitHeight.text!!.clear() // height value is cleared if it is added.
+        etMetricUnitWeight.text!!.clear() // weight value is cleared if it is added.
+
+        tvYourBMI.visibility = View.INVISIBLE // Result is cleared and the labels are hidden
+        tvBMIValue.visibility = View.INVISIBLE // Result is cleared and the labels are hidden
+        tvBMIType.visibility = View.INVISIBLE // Result is cleared and the labels are hidden
+        tvBMIDescription.visibility = View.INVISIBLE // Result is cleared and the labels are hidden
+    }
+
+    private fun makeVisibleUsUnitsView() {
+        currentVisibleView = US_UNITS_VIEW // Current View is updated here.
+        llMetricUnitsView.visibility = View.GONE // METRIC UNITS VIEW is hidden
+        llUsUnitsView.visibility = View.VISIBLE // US UNITS VIEW is Visible
+
+        etUsUnitWeight.text!!.clear() // weight value is cleared.
+        etUsUnitHeightFeet.text!!.clear() // height feet value is cleared.
+        etUsUnitHeightInch.text!!.clear() // height inch is cleared.
+
+        tvYourBMI.visibility = View.INVISIBLE // Result is cleared and the labels are hidden
+        tvBMIValue.visibility = View.INVISIBLE // Result is cleared and the labels are hidden
+        tvBMIType.visibility = View.INVISIBLE // Result is cleared and the labels are hidden
+        tvBMIDescription.visibility = View.INVISIBLE // Result is cleared and the labels are hidden
     }
 
     private fun displayBDMIResult(bmi: Float){
