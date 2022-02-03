@@ -20,7 +20,7 @@ class HistoryActivity : AppCompatActivity() {
             actionbar.setDisplayHomeAsUpEnabled(true)   //back button
             actionbar.title = "CALCULATE BMI"
         }
-        toolbar_bmi_activity.setNavigationOnClickListener {
+        toolbar_history_activity.setNavigationOnClickListener {
             onBackPressed()
         }
 
