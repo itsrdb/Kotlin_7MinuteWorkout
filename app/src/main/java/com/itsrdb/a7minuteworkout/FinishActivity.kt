@@ -26,7 +26,7 @@ class FinishActivity : AppCompatActivity() {
             finish()
         }
 
-
+        addDateToDatabase()
     }
 
     private fun addDateToDatabase() {
